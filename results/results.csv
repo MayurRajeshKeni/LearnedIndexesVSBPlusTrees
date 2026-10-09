@@ -1,0 +1,266 @@
+dataset,index,config,metric,value
+uniform,B+ Tree,default,build_time_s,0.06619109999155626
+uniform,B+ Tree,default,memory_bytes,120.0
+uniform,B+ Tree,default,lookup_mean_ns,1223.672
+uniform,B+ Tree,default,lookup_p50_ns,1100.0
+uniform,B+ Tree,default,lookup_p99_ns,2600.0
+uniform,B+ Tree,default,negative_lookup_mean_ns,648.3
+uniform,B+ Tree,default,insert_throughput_ops_sec,840067.8766321298
+uniform,B+ Tree,default,retrain_count,0.0
+uniform,B+ Tree,default,retrain_time_s,0.0
+uniform,B+ Tree,default,mixed_100_0_ops_sec,890844.7860391799
+uniform,B+ Tree,default,mixed_90_10_ops_sec,808740.8731391121
+uniform,B+ Tree,default,mixed_50_50_ops_sec,1112384.17302251
+uniform,RMI,M=1000,build_time_s,0.012019000016152859
+uniform,RMI,M=1000,memory_bytes,33016.0
+uniform,RMI,M=1000,mean_error,4.21479
+uniform,RMI,M=1000,max_error,29.0
+uniform,RMI,M=1000,search_window_size,16.468505
+uniform,RMI,M=1000,lookup_mean_ns,2725.324
+uniform,RMI,M=1000,lookup_p50_ns,2400.0
+uniform,RMI,M=1000,lookup_p99_ns,6200.0
+uniform,RMI,M=1000,negative_lookup_mean_ns,2751.75
+uniform,RMI,M=1000,insert_throughput_ops_sec,116369.7299128464
+uniform,RMI,M=1000,retrain_count,9.0
+uniform,RMI,M=1000,retrain_time_s,0.1533911998849362
+uniform,RMI,M=1000,mixed_100_0_ops_sec,369112.65312855993
+uniform,RMI,M=1000,mixed_90_10_ops_sec,347249.9545509412
+uniform,RMI,M=1000,mixed_50_50_ops_sec,180619.1986154043
+uniform,PGM,eps=64,build_time_s,0.04501860000891611
+uniform,PGM,eps=64,memory_bytes,384.0
+uniform,PGM,eps=64,mean_error,23.599935
+uniform,PGM,eps=64,max_error,64.0
+uniform,PGM,eps=64,search_window_size,129.0
+uniform,PGM,eps=64,num_segments,16.0
+uniform,PGM,eps=64,lookup_mean_ns,3303.796
+uniform,PGM,eps=64,lookup_p50_ns,2800.0
+uniform,PGM,eps=64,lookup_p99_ns,7000.0
+uniform,PGM,eps=64,negative_lookup_mean_ns,2971.4
+uniform,PGM,eps=64,insert_throughput_ops_sec,47196.02514961544
+uniform,PGM,eps=64,retrain_count,9.0
+uniform,PGM,eps=64,retrain_time_s,0.4088620000402443
+uniform,PGM,eps=64,mixed_100_0_ops_sec,385841.1728505683
+uniform,PGM,eps=64,mixed_90_10_ops_sec,374939.07240602426
+uniform,PGM,eps=64,mixed_50_50_ops_sec,88317.53332626322
+uniform,ALEX-lite,default,build_time_s,0.0792982000275515
+uniform,ALEX-lite,default,memory_bytes,1100016.0
+uniform,ALEX-lite,default,lookup_mean_ns,3709.744
+uniform,ALEX-lite,default,lookup_p50_ns,3400.0
+uniform,ALEX-lite,default,lookup_p99_ns,8700.0
+uniform,ALEX-lite,default,negative_lookup_mean_ns,4238.6
+uniform,ALEX-lite,default,insert_throughput_ops_sec,209038.1839610353
+uniform,ALEX-lite,default,retrain_count,0.0
+uniform,ALEX-lite,default,retrain_time_s,0.0
+uniform,ALEX-lite,default,mixed_100_0_ops_sec,269000.1533108997
+uniform,ALEX-lite,default,mixed_90_10_ops_sec,228498.30910296246
+uniform,ALEX-lite,default,mixed_50_50_ops_sec,223439.22098932543
+lognormal,B+ Tree,default,build_time_s,0.05321879999246448
+lognormal,B+ Tree,default,memory_bytes,120.0
+lognormal,B+ Tree,default,lookup_mean_ns,1111.91
+lognormal,B+ Tree,default,lookup_p50_ns,1000.0
+lognormal,B+ Tree,default,lookup_p99_ns,2500.0
+lognormal,B+ Tree,default,negative_lookup_mean_ns,541.45
+lognormal,B+ Tree,default,insert_throughput_ops_sec,1261026.0934416293
+lognormal,B+ Tree,default,retrain_count,0.0
+lognormal,B+ Tree,default,retrain_time_s,0.0
+lognormal,B+ Tree,default,mixed_100_0_ops_sec,909587.0465601247
+lognormal,B+ Tree,default,mixed_90_10_ops_sec,1014157.641273796
+lognormal,B+ Tree,default,mixed_50_50_ops_sec,1421989.6484986986
+lognormal,RMI,M=1000,build_time_s,0.012765299994498491
+lognormal,RMI,M=1000,memory_bytes,33016.0
+lognormal,RMI,M=1000,mean_error,4.063485
+lognormal,RMI,M=1000,max_error,24.0
+lognormal,RMI,M=1000,search_window_size,16.292135
+lognormal,RMI,M=1000,lookup_mean_ns,2150.394
+lognormal,RMI,M=1000,lookup_p50_ns,2000.0
+lognormal,RMI,M=1000,lookup_p99_ns,4800.0
+lognormal,RMI,M=1000,negative_lookup_mean_ns,2002.2
+lognormal,RMI,M=1000,insert_throughput_ops_sec,125770.7387951855
+lognormal,RMI,M=1000,retrain_count,9.0
+lognormal,RMI,M=1000,retrain_time_s,0.14185489993542433
+lognormal,RMI,M=1000,mixed_100_0_ops_sec,421414.60535976785
+lognormal,RMI,M=1000,mixed_90_10_ops_sec,455773.97233620874
+lognormal,RMI,M=1000,mixed_50_50_ops_sec,212273.66330864927
+lognormal,PGM,eps=64,build_time_s,0.037507800036109984
+lognormal,PGM,eps=64,memory_bytes,720.0
+lognormal,PGM,eps=64,mean_error,24.70596
+lognormal,PGM,eps=64,max_error,64.0
+lognormal,PGM,eps=64,search_window_size,129.0
+lognormal,PGM,eps=64,num_segments,30.0
+lognormal,PGM,eps=64,lookup_mean_ns,2733.358
+lognormal,PGM,eps=64,lookup_p50_ns,2400.0
+lognormal,PGM,eps=64,lookup_p99_ns,6500.0
+lognormal,PGM,eps=64,negative_lookup_mean_ns,2640.0
+lognormal,PGM,eps=64,insert_throughput_ops_sec,47918.02184877891
+lognormal,PGM,eps=64,retrain_count,9.0
+lognormal,PGM,eps=64,retrain_time_s,0.40228610002668574
+lognormal,PGM,eps=64,mixed_100_0_ops_sec,310219.8839209388
+lognormal,PGM,eps=64,mixed_90_10_ops_sec,308194.90268479
+lognormal,PGM,eps=64,mixed_50_50_ops_sec,90863.32883222346
+lognormal,ALEX-lite,default,build_time_s,0.08227239997358993
+lognormal,ALEX-lite,default,memory_bytes,1100016.0
+lognormal,ALEX-lite,default,lookup_mean_ns,3777.582
+lognormal,ALEX-lite,default,lookup_p50_ns,3400.0
+lognormal,ALEX-lite,default,lookup_p99_ns,8900.0
+lognormal,ALEX-lite,default,negative_lookup_mean_ns,3856.05
+lognormal,ALEX-lite,default,insert_throughput_ops_sec,201637.70136929632
+lognormal,ALEX-lite,default,retrain_count,0.0
+lognormal,ALEX-lite,default,retrain_time_s,0.0
+lognormal,ALEX-lite,default,mixed_100_0_ops_sec,282406.89742181747
+lognormal,ALEX-lite,default,mixed_90_10_ops_sec,241773.6516161427
+lognormal,ALEX-lite,default,mixed_50_50_ops_sec,232595.46324943186
+clustered,B+ Tree,default,build_time_s,0.0506487000384368
+clustered,B+ Tree,default,memory_bytes,120.0
+clustered,B+ Tree,default,lookup_mean_ns,810.326
+clustered,B+ Tree,default,lookup_p50_ns,700.0
+clustered,B+ Tree,default,lookup_p99_ns,1900.0
+clustered,B+ Tree,default,negative_lookup_mean_ns,312.05
+clustered,B+ Tree,default,insert_throughput_ops_sec,1704942.6324861043
+clustered,B+ Tree,default,retrain_count,0.0
+clustered,B+ Tree,default,retrain_time_s,0.0
+clustered,B+ Tree,default,mixed_100_0_ops_sec,1141448.2691638963
+clustered,B+ Tree,default,mixed_90_10_ops_sec,960006.1405097814
+clustered,B+ Tree,default,mixed_50_50_ops_sec,1060310.460526211
+clustered,RMI,M=1000,build_time_s,0.0053189999889582396
+clustered,RMI,M=1000,memory_bytes,33016.0
+clustered,RMI,M=1000,mean_error,2065.73508
+clustered,RMI,M=1000,max_error,4600.0
+clustered,RMI,M=1000,search_window_size,3483.166985
+clustered,RMI,M=1000,lookup_mean_ns,2333.366
+clustered,RMI,M=1000,lookup_p50_ns,2000.0
+clustered,RMI,M=1000,lookup_p99_ns,5300.0
+clustered,RMI,M=1000,negative_lookup_mean_ns,1733.0
+clustered,RMI,M=1000,insert_throughput_ops_sec,213642.8020222925
+clustered,RMI,M=1000,retrain_count,9.0
+clustered,RMI,M=1000,retrain_time_s,0.07995169993955642
+clustered,RMI,M=1000,mixed_100_0_ops_sec,389511.24088348006
+clustered,RMI,M=1000,mixed_90_10_ops_sec,403989.80320091225
+clustered,RMI,M=1000,mixed_50_50_ops_sec,263543.50059747515
+clustered,PGM,eps=64,build_time_s,0.038960799982305616
+clustered,PGM,eps=64,memory_bytes,2328.0
+clustered,PGM,eps=64,mean_error,30.33926
+clustered,PGM,eps=64,max_error,64.0
+clustered,PGM,eps=64,search_window_size,129.0
+clustered,PGM,eps=64,num_segments,97.0
+clustered,PGM,eps=64,lookup_mean_ns,2842.552
+clustered,PGM,eps=64,lookup_p50_ns,2600.0
+clustered,PGM,eps=64,lookup_p99_ns,6300.0
+clustered,PGM,eps=64,negative_lookup_mean_ns,3224.8
+clustered,PGM,eps=64,insert_throughput_ops_sec,43932.07924961164
+clustered,PGM,eps=64,retrain_count,9.0
+clustered,PGM,eps=64,retrain_time_s,0.43836979992920533
+clustered,PGM,eps=64,mixed_100_0_ops_sec,343394.8006645064
+clustered,PGM,eps=64,mixed_90_10_ops_sec,341779.85242601513
+clustered,PGM,eps=64,mixed_50_50_ops_sec,90091.95684736929
+clustered,ALEX-lite,default,build_time_s,0.08034679997945204
+clustered,ALEX-lite,default,memory_bytes,1100016.0
+clustered,ALEX-lite,default,lookup_mean_ns,3472.162
+clustered,ALEX-lite,default,lookup_p50_ns,3300.0
+clustered,ALEX-lite,default,lookup_p99_ns,8400.0
+clustered,ALEX-lite,default,negative_lookup_mean_ns,4155.15
+clustered,ALEX-lite,default,insert_throughput_ops_sec,198554.52297633805
+clustered,ALEX-lite,default,retrain_count,0.0
+clustered,ALEX-lite,default,retrain_time_s,0.0
+clustered,ALEX-lite,default,mixed_100_0_ops_sec,262583.6657691291
+clustered,ALEX-lite,default,mixed_90_10_ops_sec,262553.33096306084
+clustered,ALEX-lite,default,mixed_50_50_ops_sec,227149.34386995932
+sequential_noise,B+ Tree,default,build_time_s,0.050158999976702034
+sequential_noise,B+ Tree,default,memory_bytes,120.0
+sequential_noise,B+ Tree,default,lookup_mean_ns,755.394
+sequential_noise,B+ Tree,default,lookup_p50_ns,700.0
+sequential_noise,B+ Tree,default,lookup_p99_ns,1700.0
+sequential_noise,B+ Tree,default,negative_lookup_mean_ns,525.45
+sequential_noise,B+ Tree,default,insert_throughput_ops_sec,1520958.8112364546
+sequential_noise,B+ Tree,default,retrain_count,0.0
+sequential_noise,B+ Tree,default,retrain_time_s,0.0
+sequential_noise,B+ Tree,default,mixed_100_0_ops_sec,1032258.0627794693
+sequential_noise,B+ Tree,default,mixed_90_10_ops_sec,1183768.1701787605
+sequential_noise,B+ Tree,default,mixed_50_50_ops_sec,1065518.74964454
+sequential_noise,RMI,M=1000,build_time_s,0.01038160000462085
+sequential_noise,RMI,M=1000,memory_bytes,33016.0
+sequential_noise,RMI,M=1000,mean_error,1.37584
+sequential_noise,RMI,M=1000,max_error,9.0
+sequential_noise,RMI,M=1000,search_window_size,6.115445
+sequential_noise,RMI,M=1000,lookup_mean_ns,2181.038
+sequential_noise,RMI,M=1000,lookup_p50_ns,1900.0
+sequential_noise,RMI,M=1000,lookup_p99_ns,5000.0
+sequential_noise,RMI,M=1000,negative_lookup_mean_ns,1868.0
+sequential_noise,RMI,M=1000,insert_throughput_ops_sec,138117.6361889405
+sequential_noise,RMI,M=1000,retrain_count,9.0
+sequential_noise,RMI,M=1000,retrain_time_s,0.1310839000507258
+sequential_noise,RMI,M=1000,mixed_100_0_ops_sec,444426.66797819233
+sequential_noise,RMI,M=1000,mixed_90_10_ops_sec,413477.71995404805
+sequential_noise,RMI,M=1000,mixed_50_50_ops_sec,220460.01192453929
+sequential_noise,PGM,eps=64,build_time_s,0.04022670001722872
+sequential_noise,PGM,eps=64,memory_bytes,48.0
+sequential_noise,PGM,eps=64,mean_error,22.09806
+sequential_noise,PGM,eps=64,max_error,64.0
+sequential_noise,PGM,eps=64,search_window_size,129.0
+sequential_noise,PGM,eps=64,num_segments,2.0
+sequential_noise,PGM,eps=64,lookup_mean_ns,2726.288
+sequential_noise,PGM,eps=64,lookup_p50_ns,2400.0
+sequential_noise,PGM,eps=64,lookup_p99_ns,6300.0
+sequential_noise,PGM,eps=64,negative_lookup_mean_ns,2407.1
+sequential_noise,PGM,eps=64,insert_throughput_ops_sec,46816.21638887691
+sequential_noise,PGM,eps=64,retrain_count,9.0
+sequential_noise,PGM,eps=64,retrain_time_s,0.4134838000172749
+sequential_noise,PGM,eps=64,mixed_100_0_ops_sec,330236.8126416568
+sequential_noise,PGM,eps=64,mixed_90_10_ops_sec,376201.4932847314
+sequential_noise,PGM,eps=64,mixed_50_50_ops_sec,96441.96657110847
+sequential_noise,ALEX-lite,default,build_time_s,0.08522000000812113
+sequential_noise,ALEX-lite,default,memory_bytes,1100016.0
+sequential_noise,ALEX-lite,default,lookup_mean_ns,4050.508
+sequential_noise,ALEX-lite,default,lookup_p50_ns,3600.0
+sequential_noise,ALEX-lite,default,lookup_p99_ns,9300.0
+sequential_noise,ALEX-lite,default,negative_lookup_mean_ns,4423.65
+sequential_noise,ALEX-lite,default,insert_throughput_ops_sec,192330.6240099022
+sequential_noise,ALEX-lite,default,retrain_count,0.0
+sequential_noise,ALEX-lite,default,retrain_time_s,0.0
+sequential_noise,ALEX-lite,default,mixed_100_0_ops_sec,264067.5379605049
+sequential_noise,ALEX-lite,default,mixed_90_10_ops_sec,264288.7725911663
+sequential_noise,ALEX-lite,default,mixed_50_50_ops_sec,216739.20215113505
+sensitivity,RMI_M_sweep,M=100,M,100.0
+sensitivity,RMI_M_sweep,M=100,build_time_s,0.007171300007030368
+sensitivity,RMI_M_sweep,M=100,memory_bytes,3316.0
+sensitivity,RMI_M_sweep,M=100,lookup_mean_ns,2422.7999994764104
+sensitivity,RMI_M_sweep,M=100,mean_error,13.754665
+sensitivity,RMI_M_sweep,M=100,max_error,71.0
+sensitivity,RMI_M_sweep,M=100,search_window_size,54.475075
+sensitivity,RMI_M_sweep,M=1000,M,1000.0
+sensitivity,RMI_M_sweep,M=1000,build_time_s,0.010967899987008423
+sensitivity,RMI_M_sweep,M=1000,memory_bytes,33016.0
+sensitivity,RMI_M_sweep,M=1000,lookup_mean_ns,2226.5550011070445
+sensitivity,RMI_M_sweep,M=1000,mean_error,4.21479
+sensitivity,RMI_M_sweep,M=1000,max_error,29.0
+sensitivity,RMI_M_sweep,M=1000,search_window_size,16.468505
+sensitivity,RMI_M_sweep,M=10000,M,10000.0
+sensitivity,RMI_M_sweep,M=10000,build_time_s,0.06687059998512268
+sensitivity,RMI_M_sweep,M=10000,memory_bytes,330016.0
+sensitivity,RMI_M_sweep,M=10000,lookup_mean_ns,2245.1099997851998
+sensitivity,RMI_M_sweep,M=10000,mean_error,1.226285
+sensitivity,RMI_M_sweep,M=10000,max_error,9.0
+sensitivity,RMI_M_sweep,M=10000,search_window_size,5.010855
+sensitivity,PGM_eps_sweep,eps=16,epsilon,16.0
+sensitivity,PGM_eps_sweep,eps=16,build_time_s,0.04039590002503246
+sensitivity,PGM_eps_sweep,eps=16,memory_bytes,6240.0
+sensitivity,PGM_eps_sweep,eps=16,num_segments,260.0
+sensitivity,PGM_eps_sweep,eps=16,lookup_mean_ns,2498.7350014271215
+sensitivity,PGM_eps_sweep,eps=16,mean_error,5.9761
+sensitivity,PGM_eps_sweep,eps=16,max_error,16.0
+sensitivity,PGM_eps_sweep,eps=16,search_window_size,33.0
+sensitivity,PGM_eps_sweep,eps=64,epsilon,64.0
+sensitivity,PGM_eps_sweep,eps=64,build_time_s,0.039676600019447505
+sensitivity,PGM_eps_sweep,eps=64,memory_bytes,384.0
+sensitivity,PGM_eps_sweep,eps=64,num_segments,16.0
+sensitivity,PGM_eps_sweep,eps=64,lookup_mean_ns,2656.3299994450063
+sensitivity,PGM_eps_sweep,eps=64,mean_error,23.599935
+sensitivity,PGM_eps_sweep,eps=64,max_error,64.0
+sensitivity,PGM_eps_sweep,eps=64,search_window_size,129.0
+sensitivity,PGM_eps_sweep,eps=256,epsilon,256.0
+sensitivity,PGM_eps_sweep,eps=256,build_time_s,0.04133100004401058
+sensitivity,PGM_eps_sweep,eps=256,memory_bytes,48.0
+sensitivity,PGM_eps_sweep,eps=256,num_segments,2.0
+sensitivity,PGM_eps_sweep,eps=256,lookup_mean_ns,2774.8099993914366
+sensitivity,PGM_eps_sweep,eps=256,mean_error,78.51335
+sensitivity,PGM_eps_sweep,eps=256,max_error,256.0
+sensitivity,PGM_eps_sweep,eps=256,search_window_size,513.0
