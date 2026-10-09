@@ -15,7 +15,7 @@ from src.datasets import get_dataset
 from src.rmi_index import RMIIndex
 from src.pgm_index import PGMIndex
 from src.viz_btree import VizBTree
-from ui.theme import INDEX_COLORS, apply_plotly_theme, render_metric_card, render_info_cloud, render_glossary_cloud
+from ui.theme import INDEX_COLORS, apply_plotly_theme, render_metric_card, render_info_cloud
 
 
 def render_tab_concept(
@@ -402,6 +402,3 @@ def render_tab_concept(
                 4. **Write Trade-off:** While reads are fast, adding new numbers requires updating delta buffers and eventually re-fitting the curve equations.
                 """
             )
-
-    # 7. Literature Glossary Cloud
-    render_glossary_cloud()
