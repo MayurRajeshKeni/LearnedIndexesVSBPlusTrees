@@ -15,7 +15,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 
-from ui.theme import INDEX_COLORS, apply_plotly_theme
+from ui.theme import INDEX_COLORS, apply_plotly_theme, render_info_cloud
 
 
 def render_tab_dashboard():
@@ -161,6 +161,23 @@ def render_tab_dashboard():
     # 4. Sensitivity Analysis Section
     st.markdown("---")
     st.markdown("#### 🎛️ Sensitivity Analysis (Theoretical Trade-offs)")
+
+    sens_clouds = [
+        {
+            "knob": "RMI Model Count (M)",
+            "category": "Resolution Sweep",
+            "effect": "More Models = Tighter Bounds, Higher Memory",
+            "detail": "Sweeping M from 10 to 1,000 shows how dividing the domain narrows the final binary search window."
+        },
+        {
+            "knob": "PGM Error Bound (ε)",
+            "category": "Tolerance Sweep",
+            "effect": "Smaller ε = More Segments, Tighter Search",
+            "detail": "Sweeping ε from 8 to 256 illustrates the geometric trade-off: larger ε yields extreme segment compression."
+        }
+    ]
+    render_info_cloud("What Changes What? (Sensitivity Hyperparameter Curves)", sens_clouds, icon="🎛️")
+
     sens_df = df[df["dataset"] == "sensitivity"]
 
     s_col1, s_col2 = st.columns(2)

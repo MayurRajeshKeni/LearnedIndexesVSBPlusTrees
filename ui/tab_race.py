@@ -20,7 +20,7 @@ from src.btree_index import BTreeIndex
 from src.rmi_index import RMIIndex
 from src.pgm_index import PGMIndex
 from src.alex_lite_index import AlexLiteIndex
-from ui.theme import INDEX_COLORS, apply_plotly_theme, render_metric_card
+from ui.theme import INDEX_COLORS, apply_plotly_theme, render_metric_card, render_info_cloud
 
 
 def render_tab_race(dataset_name: str, n_keys: int, seed: int):
@@ -54,16 +54,33 @@ def render_tab_race(dataset_name: str, n_keys: int, seed: int):
     with c3:
         include_alex = st.checkbox("Include ALEX-lite", value=True)
 
-    with st.expander("💡 What Changes What in the Live Race?", expanded=False):
-        st.markdown(
-            """
-            • **100% Lookups (Read-Only):** Demonstrates pure query execution without any buffer overhead or retraining pauses.  
-            • **100% Inserts (Write-Heavy):** Tests the write penalty directly. Watch RMI and PGM delta buffers fill up and trigger sharp retraining pauses on the trajectory plot, while B+ Tree continues at a steady pace.  
-            • **Mixed 90/10 & 50/50:** Simulates realistic database transaction traffic. Compares how periodic retraining pauses affect cumulative latency compared to the smooth, logarithmic B+ Tree.  
-            • **Include ALEX-lite:** Enables an updatable learned index with gapped-array slots instead of a delta buffer, showing how in-place inserts avoid full-model retraining stops.  
-            • **Number of Operations:** Controls the benchmark duration and the number of buffer retraining cycles triggered.
-            """
-        )
+    race_clouds = [
+        {
+            "knob": "100% Lookups",
+            "category": "Read-Heavy",
+            "effect": "Pure Query Execution Without Buffer Delays",
+            "detail": "Models execute pure arithmetic prediction without any writes. Reveals raw read latency scaling."
+        },
+        {
+            "knob": "100% Inserts",
+            "category": "Write-Heavy",
+            "effect": "Triggers Severe Retraining Pause Penalties",
+            "detail": "Delta buffers rapidly fill and trigger full model rebuilds (plateaus in trajectory). B+ Tree remains steady."
+        },
+        {
+            "knob": "Mixed 90/10 & 50/50",
+            "category": "Real-World",
+            "effect": "Simulates Production Mixed Transaction Traffic",
+            "detail": "Interleaves queries with inserts, showing how even a 10% write ratio introduces periodic latency spikes on learned models."
+        },
+        {
+            "knob": "Include ALEX-lite",
+            "category": "Adaptive",
+            "effect": "Tests In-Place Gapped Array Insertions",
+            "detail": "Shows an updatable learned index inserting keys into pre-allocated gaps, avoiding full-model retraining stops."
+        }
+    ]
+    render_info_cloud("What Changes What? (Live Race Workload Guide)", race_clouds, icon="🏎️")
 
     start_race = st.button("🚀 Start Live Race!", type="primary", use_container_width=True)
 

@@ -95,3 +95,144 @@ def render_metric_card(title: str, value: str, subtext: str = "", color: str = "
         """,
         unsafe_allow_html=True
     )
+
+
+def render_info_cloud(title: str, items: list, icon: str = "☁️") -> None:
+    """Renders a styled interactive Info Cloud container explaining 'What Changes What'."""
+    cards_html = []
+    colors = ["#2b5c8f", "#e26d5c", "#2a9d8f", "#9b5de5", "#f4a261", "#457b9d"]
+    for i, it in enumerate(items):
+        color = colors[i % len(colors)]
+        knob = it.get("knob", "")
+        effect = it.get("effect", "")
+        detail = it.get("detail", "")
+        category = it.get("category", "Knob")
+        cards_html.append(f"""
+        <div style="
+            background: rgba(128, 128, 128, 0.07);
+            border-left: 3.5px solid {color};
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.86rem;
+        ">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-weight: 700; color: {color};">{knob}</span>
+                <span style="font-size: 0.72rem; opacity: 0.8; background: rgba(128,128,128,0.18); padding: 1px 6px; border-radius: 4px;">{category}</span>
+            </div>
+            <div style="font-weight: 600; margin-bottom: 4px; font-size: 0.83rem;">➔ {effect}</div>
+            <div style="font-size: 0.78rem; opacity: 0.8; line-height: 1.35;">{detail}</div>
+        </div>
+        """)
+
+    grid_content = "".join(cards_html)
+    full_html = f"""
+    <div style="
+        background: var(--secondary-background-color, rgba(128, 128, 128, 0.05));
+        border: 1px solid rgba(128, 128, 128, 0.18);
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin: 12px 0 16px 0;
+    ">
+        <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.96rem; margin-bottom: 12px;">
+            <span>{icon}</span> <span>{title}</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px;">
+            {grid_content}
+        </div>
+    </div>
+    """
+    st.markdown(full_html, unsafe_allow_html=True)
+
+
+def render_glossary_cloud() -> None:
+    """Renders a comprehensive glossary cloud with key terminology, acronyms, and literature citations."""
+    glossary_items = [
+        {
+            "term": "RMI",
+            "name": "Recursive Model Index",
+            "citation": "Kraska et al., SIGMOD 2018",
+            "desc": "Hierarchical network of linear models replacing internal B+ Tree nodes to predict key locations via regression."
+        },
+        {
+            "term": "PGM",
+            "name": "Piecewise Geometric Model Index",
+            "citation": "Ferragina & Vinciguerra, PVLDB 2020",
+            "desc": "Optimal streaming segmentation guaranteeing that maximum prediction error never exceeds a strict tolerance (ε)."
+        },
+        {
+            "term": "ALEX",
+            "name": "Adaptive Learned Extensible Index",
+            "citation": "Ding et al., SIGMOD 2020",
+            "desc": "Dynamic in-memory learned index using gapped arrays to absorb new insertions in-place without full-model retraining stops."
+        },
+        {
+            "term": "B+ Tree",
+            "name": "Self-Balancing Search Tree",
+            "citation": "Bayer & McCreight, 1972",
+            "desc": "Traditional database index organizing keys in multi-way balanced leaf pages with deterministic O(log_B N) pointer traversal."
+        },
+        {
+            "term": "CDF",
+            "name": "Cumulative Distribution Function",
+            "citation": "Statistics",
+            "desc": "F(x) = P(X ≤ x). A learned index trains a regression model to approximate the empirical inverse CDF of the dataset."
+        },
+        {
+            "term": "SOSD",
+            "name": "Search on Structured Data",
+            "citation": "Marcus et al., 2020",
+            "desc": "The open-source standardized benchmark platform for rigorously comparing learned indexes against traditional B-trees."
+        },
+        {
+            "term": "Delta Buffer",
+            "name": "Write Staging Buffer",
+            "citation": "Architecture",
+            "desc": "Appends new keys in a fast auxiliary memory buffer to delay expensive full retraining cycles for static learned models."
+        },
+        {
+            "term": "Write Penalty",
+            "name": "Retraining Pause Penalty",
+            "citation": "Trade-off",
+            "desc": "The dramatic throughput drop that static learned indexes suffer when write buffers fill and models must be re-fitted."
+        }
+    ]
+
+    cards_html = []
+    colors = ["#2b5c8f", "#e26d5c", "#2a9d8f", "#9b5de5", "#f4a261", "#457b9d", "#6c757d", "#e63946"]
+    for i, it in enumerate(glossary_items):
+        color = colors[i % len(colors)]
+        cards_html.append(f"""
+        <div style="
+            background: rgba(128, 128, 128, 0.07);
+            border-left: 3.5px solid {color};
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 0.86rem;
+        ">
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px;">
+                <span style="font-weight: 700; color: {color}; font-size: 0.95rem;">{it['term']}</span>
+                <span style="font-size: 0.72rem; opacity: 0.75; font-style: italic;">{it['citation']}</span>
+            </div>
+            <div style="font-weight: 600; font-size: 0.82rem; margin-bottom: 4px; opacity: 0.9;">{it['name']}</div>
+            <div style="font-size: 0.78rem; opacity: 0.8; line-height: 1.35;">{it['desc']}</div>
+        </div>
+        """)
+
+    grid_content = "".join(cards_html)
+    full_html = f"""
+    <div style="
+        background: var(--secondary-background-color, rgba(128, 128, 128, 0.05));
+        border: 1px solid rgba(128, 128, 128, 0.18);
+        border-radius: 10px;
+        padding: 14px 18px;
+        margin: 12px 0 16px 0;
+    ">
+        <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.98rem; margin-bottom: 12px;">
+            <span>📚</span> <span>Comprehensive Literature Glossary & Acronyms</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px;">
+            {grid_content}
+        </div>
+    </div>
+    """
+    st.markdown(full_html, unsafe_allow_html=True)

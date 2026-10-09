@@ -15,7 +15,7 @@ from src.datasets import get_dataset
 from src.rmi_index import RMIIndex
 from src.pgm_index import PGMIndex
 from src.viz_btree import VizBTree
-from ui.theme import INDEX_COLORS, apply_plotly_theme, render_metric_card
+from ui.theme import INDEX_COLORS, apply_plotly_theme, render_metric_card, render_info_cloud, render_glossary_cloud
 
 
 def render_tab_concept(
@@ -31,15 +31,39 @@ def render_tab_concept(
         "The B+ Tree chases pointers down balanced tree nodes, while the Learned Index calculates the position directly."
     )
 
-    with st.expander("💡 What Changes What on This Screen?", expanded=False):
-        st.markdown(
-            """
-            • **Left Panel (B+ Tree):** Displays the pointer traversal from root to leaf node. Changing $N$ in the sidebar adjusts tree height and key counts. Notice how pointer hopping stays identical regardless of dataset distribution.  
-            • **Right Panel (Function Approximation):** Displays the CDF curve (blue) and the linear regression prediction (dashed line). Notice how **Uniform** is a straight diagonal, while **Clustered** creates sharp cliffs that push the red diamond (model prediction) further away from the teal circle (true position).  
-            • **Model Knobs:** Adjusting **RMI M** in the sidebar changes the sub-model resolution. Adjusting **PGM ε** expands or shrinks the shaded error corridor `±ε`.  
-            • **Target Key Buttons:** Click **🎲 Random Present Key** to trace an existing key, or **🚫 Key That Does Not Exist** to observe how both structures verify non-existent keys.
-            """
-        )
+    concept_clouds = [
+        {
+            "knob": "Dataset Distribution",
+            "category": "Data Shape",
+            "effect": "Alters the Blue CDF Line & Model Accuracy",
+            "detail": "Uniform creates a flat diagonal line (low error). Clustered creates step cliffs that widen error bounds."
+        },
+        {
+            "knob": "Dataset Size (N)",
+            "category": "Volume",
+            "effect": "Scales Array Length & B+ Tree Depth",
+            "detail": "B+ Tree height grows with O(log N). The Learned Index keeps calculating a direct 1-step coordinate."
+        },
+        {
+            "knob": "RMI Models (M)",
+            "category": "Resolution",
+            "effect": "Splits CDF Into Finer Local Linear Models",
+            "detail": "Higher M narrows the shaded error band [min_err, max_err], shrinking the final binary search window."
+        },
+        {
+            "knob": "PGM Error Bound (ε)",
+            "category": "Tolerance",
+            "effect": "Controls Shaded Error Corridor ±ε",
+            "detail": "Smaller ε creates more linear segments (more memory) for tighter search; larger ε compresses into fewer segments."
+        },
+        {
+            "knob": "Query Mode",
+            "category": "Lookup",
+            "effect": "Traces Present Key vs. Absent Verification",
+            "detail": "See how learned bounds pinpoint existing keys, or quickly reject absent keys without scanning the whole dataset."
+        }
+    ]
+    render_info_cloud("What Changes What? (Concept Explorer Guide)", concept_clouds, icon="💡")
 
     # 1. Dataset generation
     train_keys, _ = get_dataset(dataset_name, n=n_keys, seed=seed)
@@ -379,14 +403,5 @@ def render_tab_concept(
                 """
             )
 
-    # 7. Literature Glossary
-    with st.expander("📚 Acronyms & Literature Glossary", expanded=False):
-        st.markdown(
-            """
-            • **RMI:** **Recursive Model Index** *[Kraska 2018]*  
-            • **ALEX:** **Updatable Adaptive Learned Extensible Index** *(The name is a stylized combination of "Adaptive Learned" and "Extensible")* *[Ding 2020]*  
-            • **PGM:** **Piecewise Geometric Model** *[Ferragina 2020]*  
-            • **SOSD:** **Search on Structured Data** *[Marcus 2020]*  
-            • **CDF:** **Cumulative Distribution Function**
-            """
-        )
+    # 7. Literature Glossary Cloud
+    render_glossary_cloud()

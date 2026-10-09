@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 from src.datasets import get_dataset
 from src.rmi_index import RMIIndex
 from src.pgm_index import PGMIndex
-from ui.theme import INDEX_COLORS, apply_plotly_theme, DATASET_DESCRIPTIONS, render_metric_card
+from ui.theme import INDEX_COLORS, apply_plotly_theme, DATASET_DESCRIPTIONS, render_metric_card, render_info_cloud
 
 
 def render_tab_data(dataset_name: str, n_keys: int, seed: int):
@@ -29,16 +29,33 @@ def render_tab_data(dataset_name: str, n_keys: int, seed: int):
     # 1. Dataset stats & description
     st.info(f"**{dataset_name.replace('_', ' ').title()} Dataset:** {DATASET_DESCRIPTIONS.get(dataset_name, '')}")
 
-    with st.expander("💡 What Changes What? (CDF Shape vs. Index Difficulty)", expanded=False):
-        st.markdown(
-            """
-            • **CDF Straightness = Model Accuracy:** A learned index essentially approximates the inverse of this empirical CDF curve.  
-            • **Uniform & Sequential:** The CDF is virtually a straight diagonal line. Linear regression predicts array offsets with near-zero error ($\le 5$ slots).  
-            • **Lognormal:** Highly dense in low keys, extremely sparse in high keys. Requires hierarchical models (RMI) to fit varying local slopes.  
-            • **Clustered:** Bursty keys separated by vast empty gaps form a step-function staircase. Single linear models overshoot across gaps, creating wide error bounds.  
-            • **B+ Tree Invariance:** A B+ Tree does not look at CDF curvature—it only maintains balanced fanout, giving it stable $O(\log N)$ depth across all shapes.
-            """
-        )
+    data_clouds = [
+        {
+            "knob": "CDF Curvature",
+            "category": "Math",
+            "effect": "Dictates Linear Regression Residuals",
+            "detail": "A straight CDF yields near-zero prediction errors (<= 5 keys). Curvature forces wider error bounds."
+        },
+        {
+            "knob": "Key Distribution Gaps",
+            "category": "Sparsity",
+            "effect": "Causes Model Overshoot / Undershoot",
+            "detail": "Large gaps between dense clusters create steep staircases that challenge single linear regressions."
+        },
+        {
+            "knob": "Uniform & Sequential",
+            "category": "Optimal",
+            "effect": "Best Case for Learned Indexes",
+            "detail": "Models achieve 90%+ memory savings and tiny search windows because data fits a linear slope."
+        },
+        {
+            "knob": "Clustered & Lognormal",
+            "category": "Hostile",
+            "effect": "Challenges Single Linear Models",
+            "detail": "Requires hierarchical RMI sub-models or fine PGM segments to adapt to non-linear regional slopes."
+        }
+    ]
+    render_info_cloud("What Changes What? (CDF Shape vs. Index Difficulty)", data_clouds, icon="🔍")
 
     col1, col2 = st.columns(2)
 
