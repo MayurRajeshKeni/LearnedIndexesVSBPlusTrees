@@ -138,11 +138,11 @@ def render_tab_data(dataset_name: str, n_keys: int, seed: int):
     # Computed Verdict
     st.markdown("#### Computed Suitability Verdict")
     if dataset_name in ["uniform", "sequential_noise"]:
-        verdict = "🟢 **Learned Index Highly Recommended:** The CDF is near-linear with regular key gaps. Mathematical models achieve low prediction error (< 10 keys) and superior memory compression."
+        verdict = "🟢 <b>Learned Index Highly Recommended:</b> The CDF is near-linear with regular key gaps. Mathematical models achieve low prediction error (&lt; 10 keys) and superior memory compression."
     elif dataset_name == "lognormal":
-        verdict = "🟡 **Learned Index Moderate / Mixed:** The distribution has a dense head and long right tail. Multi-stage RMI handles it well, but segment counts increase in high-density regions."
+        verdict = "🟡 <b>Learned Index Moderate / Mixed:</b> The distribution has a dense head and long right tail. Multi-stage RMI handles it well, but segment counts increase in high-density regions."
     else:  # clustered
-        verdict = "🔴 **Traditional B+ Tree Recommended:** Dense clusters separated by large empty voids create a step-like CDF. Linear models suffer large local prediction errors, increasing search window widths."
+        verdict = "🔴 <b>Traditional B+ Tree Recommended:</b> Dense clusters separated by large empty voids create a step-like CDF. Linear models suffer large local prediction errors, increasing search window widths."
 
     st.markdown(
         f"""
