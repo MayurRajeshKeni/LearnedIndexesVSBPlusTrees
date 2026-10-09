@@ -244,53 +244,43 @@ def render_tab_dashboard():
     clust_err = df[(df["dataset"] == "clustered") & (df["index"] == "RMI") & (df["metric"] == "mean_error")]["value"].values
     err_increase = (clust_err[0] / max(1e-3, uni_err[0])) if len(uni_err) and len(clust_err) else 24.9
 
-    # Render Validation Cards
-    v1, v2 = st.columns(2)
-    with v1:
-        st.markdown(
-            f"""
-            <div style="border-left: 4px solid #2a9d8f; background: var(--secondary-background-color, rgba(128, 128, 128, 0.1)); padding: 14px; border-radius: 6px; margin-bottom: 12px;">
-                <b>1. Model Parameter Compression</b><br>
-                <b>Verdict:</b> <span style="color: #2a9d8f; font-weight: bold;">AGREE (CONFIRMED ON LINEAR DATA)</span><br>
-                <i>Measured Data:</i> On sequential/linear keys, PGM represented the entire 100k dataset in just <b>2 segments ({pgm_bytes:.0f} bytes)</b>. (Note: B+ Tree measures 120B in Python because its C-extension tree nodes reside in C runtime heap memory).
+    # Render Validation Cards in Equal-Height CSS Grid
+    st.markdown(
+        f"""
+        <div style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 14px;
+            align-items: stretch;
+            margin-bottom: 16px;
+        ">
+            <div style="border-left: 4px solid #2a9d8f; background: var(--secondary-background-color, rgba(128, 128, 128, 0.1)); padding: 14px 16px; border-radius: 8px; box-sizing: border-box; height: 100%; min-height: 150px; display: flex; flex-direction: column;">
+                <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">1. Model Parameter Compression</div>
+                <div style="font-size: 0.88rem; margin-bottom: 6px;"><b>Verdict:</b> <span style="color: #2a9d8f; font-weight: bold;">AGREE (CONFIRMED ON LINEAR DATA)</span></div>
+                <div style="font-size: 0.82rem; opacity: 0.9; line-height: 1.45; font-style: italic;"><b>Measured Data:</b> On sequential/linear keys, PGM represented the entire 100k dataset in just <b>2 segments ({pgm_bytes:.0f} bytes)</b>. (Note: B+ Tree measures 120B in Python because its C-extension tree nodes reside in C runtime heap memory).</div>
             </div>
-            """,
-            unsafe_allow_html=True
-        )
 
-        st.markdown(
-            f"""
-            <div style="border-left: 4px solid #e26d5c; background: var(--secondary-background-color, rgba(128, 128, 128, 0.1)); padding: 14px; border-radius: 6px; margin-bottom: 12px;">
-                <b>2. Severe Insertion Write Penalty</b><br>
-                <b>Verdict:</b> <span style="color: #e26d5c; font-weight: bold;">AGREE (CONFIRMED)</span><br>
-                <i>Measured Data:</i> B+ Tree was <b>{ins_ratio:.1f}x faster on inserts</b>. Delta-buffer learned indexes pay a heavy write penalty from repeated model retraining pauses, confirming Kraska et al.'s known limitation.
+            <div style="border-left: 4px solid #f4a261; background: var(--secondary-background-color, rgba(128, 128, 128, 0.1)); padding: 14px 16px; border-radius: 8px; box-sizing: border-box; height: 100%; min-height: 150px; display: flex; flex-direction: column;">
+                <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">3. Wall-Clock Latency vs. Search Bound</div>
+                <div style="font-size: 0.88rem; margin-bottom: 6px;"><b>Verdict:</b> <span style="color: #f4a261; font-weight: bold;">NUANCED (PYTHON OVERHEAD LIMITATION)</span></div>
+                <div style="font-size: 0.82rem; opacity: 0.9; line-height: 1.45; font-style: italic;"><b>Measured Data:</b> B+ Tree ({btree_ns:.0f} ns) beats RMI ({rmi_ns:.0f} ns) in wall-clock time because <code>BTrees</code> is compiled C code, whereas RMI pays Python bytecode overhead. However, RMI narrowed search to <b>&le; 16 slots</b>, validating the algorithmic bound.</div>
             </div>
-            """,
-            unsafe_allow_html=True
-        )
 
-    with v2:
-        st.markdown(
-            f"""
-            <div style="border-left: 4px solid #f4a261; background: var(--secondary-background-color, rgba(128, 128, 128, 0.1)); padding: 14px; border-radius: 6px; margin-bottom: 12px;">
-                <b>3. Wall-Clock Latency vs. Search Bound</b><br>
-                <b>Verdict:</b> <span style="color: #f4a261; font-weight: bold;">NUANCED (PYTHON OVERHEAD LIMITATION)</span><br>
-                <i>Measured Data:</i> B+ Tree ({btree_ns:.0f} ns) beats RMI ({rmi_ns:.0f} ns) in wall-clock time because <code>BTrees</code> is compiled C code, whereas RMI pays Python bytecode overhead. However, RMI narrowed search to <b>&le; 16 slots</b>, validating the algorithmic bound.
+            <div style="border-left: 4px solid #e26d5c; background: var(--secondary-background-color, rgba(128, 128, 128, 0.1)); padding: 14px 16px; border-radius: 8px; box-sizing: border-box; height: 100%; min-height: 150px; display: flex; flex-direction: column;">
+                <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">2. Severe Insertion Write Penalty</div>
+                <div style="font-size: 0.88rem; margin-bottom: 6px;"><b>Verdict:</b> <span style="color: #e26d5c; font-weight: bold;">AGREE (CONFIRMED)</span></div>
+                <div style="font-size: 0.82rem; opacity: 0.9; line-height: 1.45; font-style: italic;"><b>Measured Data:</b> B+ Tree was <b>{ins_ratio:.1f}x faster on inserts</b>. Delta-buffer learned indexes pay a heavy write penalty from repeated model retraining pauses, confirming Kraska et al.'s known limitation.</div>
             </div>
-            """,
-            unsafe_allow_html=True
-        )
 
-        st.markdown(
-            f"""
-            <div style="border-left: 4px solid #9b5de5; background: var(--secondary-background-color, rgba(128, 128, 128, 0.1)); padding: 14px; border-radius: 6px; margin-bottom: 12px;">
-                <b>4. Degradation on Irregular / Clustered Data</b><br>
-                <b>Verdict:</b> <span style="color: #9b5de5; font-weight: bold;">AGREE (CONFIRMED)</span><br>
-                <i>Measured Data:</i> On the clustered dataset, RMI error increased by <b>{err_increase:.1f}x</b> compared to uniform data, confirming that non-linear steps degrade regression accuracy.
+            <div style="border-left: 4px solid #9b5de5; background: var(--secondary-background-color, rgba(128, 128, 128, 0.1)); padding: 14px 16px; border-radius: 8px; box-sizing: border-box; height: 100%; min-height: 150px; display: flex; flex-direction: column;">
+                <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">4. Degradation on Irregular / Clustered Data</div>
+                <div style="font-size: 0.88rem; margin-bottom: 6px;"><b>Verdict:</b> <span style="color: #9b5de5; font-weight: bold;">AGREE (CONFIRMED)</span></div>
+                <div style="font-size: 0.82rem; opacity: 0.9; line-height: 1.45; font-style: italic;"><b>Measured Data:</b> On the clustered dataset, RMI error increased by <b>{err_increase:.1f}x</b> compared to uniform data, confirming that non-linear steps degrade regression accuracy.</div>
             </div>
-            """,
-            unsafe_allow_html=True
-        )
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     # 6. Data Export
     st.markdown("---")
