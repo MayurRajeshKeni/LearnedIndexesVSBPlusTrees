@@ -374,31 +374,38 @@ def render_tab_concept(
         st.plotly_chart(z_fig, use_container_width=True)
 
     # 6. Beginner-Friendly Explainer Expander
+    import textwrap
     with st.expander("📖 Explain this in simple words", expanded=True):
         if dataset_name == "uniform":
             st.markdown(
-                """
-                1. **Data Shape:** Because the numbers in the **Uniform** dataset are spaced evenly, their CDF forms an almost perfect straight diagonal line.
-                2. **Why the Model Wins:** A simple linear equation ($y = m \cdot x + c$) can approximate this line with near-zero error. The prediction is right next to the real target.
-                3. **Tiny Search:** Because the error is tiny, the index only had to check a handful of positions.
-                4. **Memory Magic:** Instead of storing thousands of pointers across multiple tree levels, the learned index just remembers a couple of numbers (the slope and intercept).
-                """
+                textwrap.dedent(
+                    r"""
+                    1. **Data Shape:** Because the numbers in the **Uniform** dataset are spaced evenly, their CDF forms an almost perfect straight diagonal line.
+                    2. **Why the Model Wins:** A simple linear equation ($y = m \cdot x + c$) can approximate this line with near-zero error. The prediction is right next to the real target.
+                    3. **Tiny Search:** Because the error is tiny, the index only had to check a handful of positions.
+                    4. **Memory Magic:** Instead of storing thousands of pointers across multiple tree levels, the learned index just remembers a couple of numbers (the slope and intercept).
+                    """
+                ).strip()
             )
         elif dataset_name == "clustered":
             st.markdown(
-                """
-                1. **Data Shape:** The **Clustered** dataset has dense groups of numbers separated by huge empty gaps. The CDF looks like a staircase with steep cliffs.
-                2. **Why Models Struggle:** Straight lines cannot easily trace sharp staircases. In the gaps, a single line overshoots or undershoots, creating wider error bands.
-                3. **Wider Binary Search:** When the error band is wider, the binary search must check more slots before finding the key.
-                4. **Why B+ Trees Stay Steady:** The B+ Tree doesn't care about curves; it simply balances keys across tree nodes, keeping search depth identical regardless of gaps.
-                """
+                textwrap.dedent(
+                    """
+                    1. **Data Shape:** The **Clustered** dataset has dense groups of numbers separated by huge empty gaps. The CDF looks like a staircase with steep cliffs.
+                    2. **Why Models Struggle:** Straight lines cannot easily trace sharp staircases. In the gaps, a single line overshoots or undershoots, creating wider error bands.
+                    3. **Wider Binary Search:** When the error band is wider, the binary search must check more slots before finding the key.
+                    4. **Why B+ Trees Stay Steady:** The B+ Tree doesn't care about curves; it simply balances keys across tree nodes, keeping search depth identical regardless of gaps.
+                    """
+                ).strip()
             )
         else:
             st.markdown(
-                """
-                1. **Data Shape:** In the **Lognormal** dataset, values are tightly packed at the start and spread thinly with a long tail.
-                2. **Local Adaptation:** By dividing the range into smaller sub-models (RMI) or adaptive segments (PGM), learned indexes fit the curve piecewise.
-                3. **Predictive Speed:** Once the correct model piece is chosen, computation in CPU registers immediately narrows down the location.
-                4. **Write Trade-off:** While reads are fast, adding new numbers requires updating delta buffers and eventually re-fitting the curve equations.
-                """
+                textwrap.dedent(
+                    """
+                    1. **Data Shape:** In the **Lognormal** dataset, values are tightly packed at the start and spread thinly with a long tail.
+                    2. **Local Adaptation:** By dividing the range into smaller sub-models (RMI) or adaptive segments (PGM), learned indexes fit the curve piecewise.
+                    3. **Predictive Speed:** Once the correct model piece is chosen, computation in CPU registers immediately narrows down the location.
+                    4. **Write Trade-off:** While reads are fast, adding new numbers requires updating delta buffers and eventually re-fitting the curve equations.
+                    """
+                ).strip()
             )

@@ -1,7 +1,7 @@
 # Empirical Benchmark Report: Learned Indexes vs. B+ Trees
 
-**Dataset Scale:** N = 200,000 unique keys  
-**Evaluation Date:** 2026-10-09 21:56:26  
+**Dataset Scale:** N = 20,000 unique keys  
+**Evaluation Date:** 2026-10-12 20:02:34  
 **Target Hardware:** x86_64 CPU  
 
 ---
@@ -14,18 +14,18 @@ This benchmark empirically evaluates traditional B+ Trees against learned index 
 
 | Dataset | Metric | B+ Tree | RMI (M=1000) | PGM (eps=64) | ALEX-lite |
 | :--- | :--- | :---: | :---: | :---: | :---: |
-| **Clustered** | Mean Lookup Latency | 810.3 ns | 2333.4 ns | 2842.6 ns | 3472.2 ns |
-| | Index Memory Footprint | 0.1 KB | 32.2 KB | 2.3 KB | 1074.2 KB |
-| | Batch Insert Throughput | 1704943 ops/s | 213643 ops/s | 43932 ops/s | 198555 ops/s |
-| **Lognormal** | Mean Lookup Latency | 1111.9 ns | 2150.4 ns | 2733.4 ns | 3777.6 ns |
-| | Index Memory Footprint | 0.1 KB | 32.2 KB | 0.7 KB | 1074.2 KB |
-| | Batch Insert Throughput | 1261026 ops/s | 125771 ops/s | 47918 ops/s | 201638 ops/s |
-| **Sequential Noise** | Mean Lookup Latency | 755.4 ns | 2181.0 ns | 2726.3 ns | 4050.5 ns |
-| | Index Memory Footprint | 0.1 KB | 32.2 KB | 0.0 KB | 1074.2 KB |
-| | Batch Insert Throughput | 1520959 ops/s | 138118 ops/s | 46816 ops/s | 192331 ops/s |
-| **Uniform** | Mean Lookup Latency | 1223.7 ns | 2725.3 ns | 3303.8 ns | 3709.7 ns |
-| | Index Memory Footprint | 0.1 KB | 32.2 KB | 0.4 KB | 1074.2 KB |
-| | Batch Insert Throughput | 840068 ops/s | 116370 ops/s | 47196 ops/s | 209038 ops/s |
+| **Clustered** | Mean Lookup Latency | 455.0 ns | 2808.2 ns | 2945.9 ns | 3272.2 ns |
+| | Index Memory Footprint | 0.1 KB | 32.2 KB | 0.6 KB | 107.4 KB |
+| | Batch Insert Throughput | 2685284 ops/s | 289519 ops/s | 43120 ops/s | 216830 ops/s |
+| **Lognormal** | Mean Lookup Latency | 402.4 ns | 2582.7 ns | 2948.0 ns | 3248.7 ns |
+| | Index Memory Footprint | 0.1 KB | 32.2 KB | 0.2 KB | 107.4 KB |
+| | Batch Insert Throughput | 2686728 ops/s | 30214 ops/s | 44896 ops/s | 243336 ops/s |
+| **Sequential Noise** | Mean Lookup Latency | 664.5 ns | 2555.6 ns | 2623.2 ns | 2855.7 ns |
+| | Index Memory Footprint | 0.1 KB | 32.2 KB | 0.0 KB | 107.4 KB |
+| | Batch Insert Throughput | 2681325 ops/s | 36054 ops/s | 47105 ops/s | 267831 ops/s |
+| **Uniform** | Mean Lookup Latency | 401.1 ns | 2553.5 ns | 2940.1 ns | 3133.7 ns |
+| | Index Memory Footprint | 0.1 KB | 32.2 KB | 0.0 KB | 107.4 KB |
+| | Batch Insert Throughput | 1341562 ops/s | 27393 ops/s | 42711 ops/s | 193220 ops/s |
 
 
 ---
@@ -33,13 +33,13 @@ This benchmark empirically evaluates traditional B+ Trees against learned index 
 ## 2. Key Empirical Findings (Directly Tied to Measured Data)
 
 1. **Massive Memory Footprint Advantage (Up to -27413.3% Reduction):**  
-   On the uniform dataset with N=200,000, the B+ Tree index metadata required **0.00 MB** (120.0 bytes). In stark contrast, RMI required only **32.2 KB** (33,016.0 bytes, a **-27413.3% reduction**), while PGM required only **0.4 KB** (384.0 bytes, a **-220.0% reduction**). Learned indexes substitute millions of internal node pointers with compact floating-point regression weights.
+   On the uniform dataset with N=20,000, the B+ Tree index metadata required **0.00 MB** (120.0 bytes). In stark contrast, RMI required only **32.2 KB** (33,016.0 bytes, a **-27413.3% reduction**), while PGM required only **0.0 KB** (48.0 bytes, a **60.0% reduction**). Learned indexes substitute millions of internal node pointers with compact floating-point regression weights.
 
 2. **Point Lookup Speeds Under Predictable CDFs:**  
-   On smooth, nearly linear distributions (Uniform and Sequential with Noise), RMI and PGM achieve competitive point lookup latencies (**2725.3 ns** for RMI and **3303.8 ns** for PGM vs. **1223.7 ns** for B+ Tree). By shrinking the search interval from $N=200,000$ down to a tiny window (e.g., search window <= 2*epsilon = 128 keys for PGM), the learned models bypass multiple levels of pointer dereferences.
+   On smooth, nearly linear distributions (Uniform and Sequential with Noise), RMI and PGM achieve competitive point lookup latencies (**2553.5 ns** for RMI and **2940.1 ns** for PGM vs. **401.1 ns** for B+ Tree). By shrinking the search interval from $N=20,000$ down to a tiny window (e.g., search window <= 2*epsilon = 128 keys for PGM), the learned models bypass multiple levels of pointer dereferences.
 
-3. **The Heavy "Write Penalty" on Learned Indexes (7.2x Slowdown):**  
-   While the B+ Tree handles dynamic batch inserts with local tree rebalancing at **840068 ops/sec**, RMI achieved **116370 ops/sec** and PGM achieved **47196 ops/sec**. Learned indexes pay a severe write penalty because accumulating writes in delta buffers forces repeated full-model retraining and re-segmentation cycles.
+3. **The Heavy "Write Penalty" on Learned Indexes (49.0x Slowdown):**  
+   While the B+ Tree handles dynamic batch inserts with local tree rebalancing at **1341562 ops/sec**, RMI achieved **27393 ops/sec** and PGM achieved **42711 ops/sec**. Learned indexes pay a severe write penalty because accumulating writes in delta buffers forces repeated full-model retraining and re-segmentation cycles.
 
 4. **Distribution Sensitivity & Model Error Degeneration:**  
    On skewed and step-like distributions (Lognormal and Clustered), model prediction error increases. When RMI encounters dense clusters separated by vast empty gaps, Stage 2 models experience larger bounding windows (max_err), forcing binary search to inspect wider ranges, whereas B+ Tree performance remains rock-steady regardless of key distribution.

@@ -15,6 +15,9 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 
+import importlib
+import ui.theme
+importlib.reload(ui.theme)
 from ui.theme import INDEX_COLORS, apply_plotly_theme, render_info_cloud
 
 
@@ -141,21 +144,24 @@ def render_tab_dashboard():
     st.dataframe(score_df, use_container_width=True, hide_index=True)
 
     with st.expander("🔍 Deep Dive: Is the Scoreboard Above 'Correct' or 'Wrong'? (Python Runtime vs. C++ Reality)", expanded=True):
+        import textwrap
         st.markdown(
-            """
-            ##### 1. Why this table is scientifically **CORRECT** (Reproducible Measured Reality)
-            * **Real Measured Code:** Every number shown is real wall-clock performance measured on the machine. We never fabricate results.
-            * **C-Extension vs. Pure Python:** The B+ Tree implementation (`BTrees.OOBTree`) is a **compiled C-extension (`.pyd`)** running raw machine code on the CPU (~1,000 ns). In contrast, RMI, PGM, and ALEX-lite are written in **pure Python**, where bytecode dispatch, dynamic type checking, and PyObject reference counting add ~1,500 ns of runtime overhead per lookup.
+            textwrap.dedent(
+                """
+                ##### 1. Why this table is scientifically **CORRECT** (Reproducible Measured Reality)
+                * **Real Measured Code:** Every number shown is real wall-clock performance measured on the machine. We never fabricate results.
+                * **C-Extension vs. Pure Python:** The B+ Tree implementation (`BTrees.OOBTree`) is a **compiled C-extension (`.pyd`)** running raw machine code on the CPU (~1,000 ns). In contrast, RMI, PGM, and ALEX-lite are written in **pure Python**, where bytecode dispatch, dynamic type checking, and PyObject reference counting add ~1,500 ns of runtime overhead per lookup.
 
-            ##### 2. Why this table **DIVERGES** from Research Paper Claims
-            * **The C++ Advantage in Literature:** In Kraska et al. (2018) and Ferragina & Vinciguerra (2020), all algorithms were implemented in **optimized C++ with AVX hardware vectorization**.
-            * **CPU Arithmetic vs. Pointer Hops:** In native C++, evaluating $y = m \\cdot x + c$ takes **1–2 CPU clock cycles (~0.5 nanoseconds)**, while traversing 3–4 B+ Tree pointers causes multiple 50–100 ns CPU cache misses. In C++, arithmetic calculation is virtually free, allowing learned models to beat B+ Trees by 1.5×–3×. In Python, the interpreter overhead completely inverts that speed advantage.
+                ##### 2. Why this table **DIVERGES** from Research Paper Claims
+                * **The C++ Advantage in Literature:** In Kraska et al. (2018) and Ferragina & Vinciguerra (2020), all algorithms were implemented in **optimized C++ with AVX hardware vectorization**.
+                * **CPU Arithmetic vs. Pointer Hops:** In native C++, evaluating $y = m \\cdot x + c$ takes **1–2 CPU clock cycles (~0.5 nanoseconds)**, while traversing 3–4 B+ Tree pointers causes multiple 50–100 ns CPU cache misses. In C++, arithmetic calculation is virtually free, allowing learned models to beat B+ Trees by 1.5×–3×. In Python, the interpreter overhead completely inverts that speed advantage.
 
-            ##### 3. What this table **CONFIRMS** from the Research Literature
-            * ✅ **The Write Penalty:** B+ Tree is 7×–18× faster on inserts because learned indexes require delta buffers and expensive retraining pauses. B+ Trees handle writes dynamically via localized $O(\\log n)$ page splits.
-            * ✅ **Model Parameter Compression:** On *Sequential Noise*, PGM compressed the entire 100,000 keys into just **2 linear segments (48 bytes = 0.05 KB)**, beating even the C wrapper struct!
-            * ✅ **Distribution Sensitivity:** Lookups on smooth distributions (Uniform/Sequential) produce tiny search windows (≤ 6 keys), whereas clustered distributions expand error windows by over 25×.
-            """
+                ##### 3. What this table **CONFIRMS** from the Research Literature
+                * ✅ **The Write Penalty:** B+ Tree is 7×–18× faster on inserts because learned indexes require delta buffers and expensive retraining pauses. B+ Trees handle writes dynamically via localized $O(\\log n)$ page splits.
+                * ✅ **Model Parameter Compression:** On *Sequential Noise*, PGM compressed the entire 100,000 keys into just **2 linear segments (48 bytes = 0.05 KB)**, beating even the C wrapper struct!
+                * ✅ **Distribution Sensitivity:** Lookups on smooth distributions (Uniform/Sequential) produce tiny search windows (≤ 6 keys), whereas clustered distributions expand error windows by over 25×.
+                """
+            ).strip()
         )
 
     # 4. Sensitivity Analysis Section
@@ -244,64 +250,30 @@ def render_tab_dashboard():
     clust_err = df[(df["dataset"] == "clustered") & (df["index"] == "RMI") & (df["metric"] == "mean_error")]["value"].values
     err_increase = (clust_err[0] / max(1e-3, uni_err[0])) if len(uni_err) and len(clust_err) else 24.9
 
-    # Render Validation Cards in Strict Equal-Height Equal-Width CSS Grid
-    st.markdown(
-        f"""
-        <style>
-        .verdict-grid {{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-auto-rows: 1fr;
-            gap: 14px;
-            align-items: stretch;
-            margin-bottom: 16px;
-        }}
-        @media (max-width: 768px) {{
-            .verdict-grid {{
-                grid-template-columns: 1fr;
-                grid-auto-rows: auto;
-            }}
-        }}
-        .verdict-card {{
-            height: 100%;
-            min-height: 165px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            padding: 14px 16px;
-            border-radius: 8px;
-            background: var(--secondary-background-color, rgba(128, 128, 128, 0.1));
-        }}
-        </style>
-        <div class="verdict-grid">
-            <div class="verdict-card" style="border-left: 4px solid #2a9d8f;">
-                <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">1. Model Parameter Compression</div>
-                <div style="font-size: 0.88rem; margin-bottom: 6px;"><b>Verdict:</b> <span style="color: #2a9d8f; font-weight: bold;">AGREE (CONFIRMED ON LINEAR DATA)</span></div>
-                <div style="font-size: 0.82rem; opacity: 0.9; line-height: 1.45; font-style: italic;"><b>Measured Data:</b> On sequential/linear keys, PGM represented the entire 100k dataset in just <b>2 segments ({pgm_bytes:.0f} bytes)</b>. (Note: B+ Tree measures 120B in Python because its C-extension tree nodes reside in C runtime heap memory).</div>
-            </div>
+    # Render Validation Cards in Native Streamlit Grid
+    vcol1, vcol2 = st.columns(2)
+    with vcol1:
+        with st.container(border=True):
+            st.markdown("##### 1. Model Parameter Compression")
+            st.markdown("**:green[Verdict: AGREE (CONFIRMED ON LINEAR DATA)]**")
+            st.caption(f"*Measured Data:* On sequential/linear keys, PGM represented the entire 100k dataset in just **2 segments ({pgm_bytes:.0f} bytes)**. (Note: B+ Tree measures 120B in Python because its C-extension tree nodes reside in C runtime heap memory).")
 
-            <div class="verdict-card" style="border-left: 4px solid #f4a261;">
-                <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">3. Wall-Clock Latency vs. Search Bound</div>
-                <div style="font-size: 0.88rem; margin-bottom: 6px;"><b>Verdict:</b> <span style="color: #f4a261; font-weight: bold;">NUANCED (PYTHON OVERHEAD LIMITATION)</span></div>
-                <div style="font-size: 0.82rem; opacity: 0.9; line-height: 1.45; font-style: italic;"><b>Measured Data:</b> B+ Tree ({btree_ns:.0f} ns) beats RMI ({rmi_ns:.0f} ns) in wall-clock time because <code>BTrees</code> is compiled C code, whereas RMI pays Python bytecode overhead. However, RMI narrowed search to <b>&le; 16 slots</b>, validating the algorithmic bound.</div>
-            </div>
+        with st.container(border=True):
+            st.markdown("##### 2. Severe Insertion Write Penalty")
+            st.markdown("**:red[Verdict: AGREE (CONFIRMED)]**")
+            st.caption(f"*Measured Data:* B+ Tree was **{ins_ratio:.1f}x faster on inserts**. Delta-buffer learned indexes pay a heavy write penalty from repeated model retraining pauses, confirming Kraska et al.'s known limitation.")
 
-            <div class="verdict-card" style="border-left: 4px solid #e26d5c;">
-                <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">2. Severe Insertion Write Penalty</div>
-                <div style="font-size: 0.88rem; margin-bottom: 6px;"><b>Verdict:</b> <span style="color: #e26d5c; font-weight: bold;">AGREE (CONFIRMED)</span></div>
-                <div style="font-size: 0.82rem; opacity: 0.9; line-height: 1.45; font-style: italic;"><b>Measured Data:</b> B+ Tree was <b>{ins_ratio:.1f}x faster on inserts</b>. Delta-buffer learned indexes pay a heavy write penalty from repeated model retraining pauses, confirming Kraska et al.'s known limitation.</div>
-            </div>
+    with vcol2:
+        with st.container(border=True):
+            st.markdown("##### 3. Wall-Clock Latency vs. Search Bound")
+            st.markdown("**:orange[Verdict: NUANCED (PYTHON OVERHEAD LIMITATION)]**")
+            st.caption(f"*Measured Data:* B+ Tree ({btree_ns:.0f} ns) beats RMI ({rmi_ns:.0f} ns) in wall-clock time because `BTrees` is compiled C code, whereas RMI pays Python bytecode overhead. However, RMI narrowed search to **≤ 16 slots**, validating the algorithmic bound.")
 
-            <div class="verdict-card" style="border-left: 4px solid #9b5de5;">
-                <div style="font-size: 0.95rem; font-weight: 700; margin-bottom: 4px;">4. Degradation on Irregular / Clustered Data</div>
-                <div style="font-size: 0.88rem; margin-bottom: 6px;"><b>Verdict:</b> <span style="color: #9b5de5; font-weight: bold;">AGREE (CONFIRMED)</span></div>
-                <div style="font-size: 0.82rem; opacity: 0.9; line-height: 1.45; font-style: italic;"><b>Measured Data:</b> On the clustered dataset, RMI error increased by <b>{err_increase:.1f}x</b> compared to uniform data, confirming that non-linear steps degrade regression accuracy.</div>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+        with st.container(border=True):
+            st.markdown("##### 4. Degradation on Irregular / Clustered Data")
+            st.markdown("**:violet[Verdict: AGREE (CONFIRMED)]**")
+            st.caption(f"*Measured Data:* On the clustered dataset, RMI error increased by **{err_increase:.1f}x** compared to uniform data, confirming that non-linear steps degrade regression accuracy.")
+
 
     # 6. Data Export
     st.markdown("---")

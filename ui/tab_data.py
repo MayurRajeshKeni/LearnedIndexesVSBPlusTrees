@@ -12,6 +12,9 @@ import plotly.graph_objects as go
 from src.datasets import get_dataset
 from src.rmi_index import RMIIndex
 from src.pgm_index import PGMIndex
+import importlib
+import ui.theme
+importlib.reload(ui.theme)
 from ui.theme import INDEX_COLORS, apply_plotly_theme, DATASET_DESCRIPTIONS, render_metric_card, render_info_cloud
 
 
@@ -96,7 +99,7 @@ def render_tab_data(dataset_name: str, n_keys: int, seed: int):
 
     # Plot 2: Histogram of Key Gaps
     with col2:
-        st.markdown("#### Key Gaps Distribution ($\Delta k = k_{i+1} - k_i$)")
+        st.markdown(r"#### Key Gaps Distribution ($\Delta k = k_{i+1} - k_i$)")
         gaps = np.diff(train_keys)
         # Cap outliers for histogram readability
         p99_gap = np.percentile(gaps, 99)
@@ -138,17 +141,21 @@ def render_tab_data(dataset_name: str, n_keys: int, seed: int):
     # Computed Verdict
     st.markdown("#### Computed Suitability Verdict")
     if dataset_name in ["uniform", "sequential_noise"]:
-        verdict = "🟢 <b>Learned Index Highly Recommended:</b> The CDF is near-linear with regular key gaps. Mathematical models achieve low prediction error (&lt; 10 keys) and superior memory compression."
+        st.success(
+            "**Learned Index Highly Recommended:** The CDF is near-linear with regular key gaps. "
+            "Mathematical models achieve low prediction error (< 10 keys) and superior memory compression.",
+            icon="🟢"
+        )
     elif dataset_name == "lognormal":
-        verdict = "🟡 <b>Learned Index Moderate / Mixed:</b> The distribution has a dense head and long right tail. Multi-stage RMI handles it well, but segment counts increase in high-density regions."
+        st.warning(
+            "**Learned Index Moderate / Mixed:** The distribution has a dense head and long right tail. "
+            "Multi-stage RMI handles it well, but segment counts increase in high-density regions.",
+            icon="🟡"
+        )
     else:  # clustered
-        verdict = "🔴 <b>Traditional B+ Tree Recommended:</b> Dense clusters separated by large empty voids create a step-like CDF. Linear models suffer large local prediction errors, increasing search window widths."
+        st.error(
+            "**Traditional B+ Tree Recommended:** Dense clusters separated by large empty voids create a step-like CDF. "
+            "Linear models suffer large local prediction errors, increasing search window widths.",
+            icon="🔴"
+        )
 
-    st.markdown(
-        f"""
-        <div style="background-color: var(--secondary-background-color, rgba(66, 153, 225, 0.1)); border-left: 4px solid #3182ce; padding: 12px 18px; border-radius: 6px;">
-            {verdict}
-        </div>
-        """,
-        unsafe_allow_html=True
-    )

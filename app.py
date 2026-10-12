@@ -12,6 +12,19 @@ import streamlit as st
 # Ensure repository root is on PYTHONPATH
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+import importlib
+import ui.theme
+import ui.tab_concept
+import ui.tab_race
+import ui.tab_dashboard
+import ui.tab_data
+
+importlib.reload(ui.theme)
+importlib.reload(ui.tab_concept)
+importlib.reload(ui.tab_race)
+importlib.reload(ui.tab_dashboard)
+importlib.reload(ui.tab_data)
+
 from ui.tab_concept import render_tab_concept
 from ui.tab_race import render_tab_race
 from ui.tab_dashboard import render_tab_dashboard
@@ -25,51 +38,18 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom styling for clean, professional presentation
-st.markdown(
-    """
-    <style>
-    .main-header {
-        font-size: 2.1rem;
-        font-weight: 800;
-        margin-bottom: 0px;
-        color: var(--text-color, inherit);
-    }
-    .sub-header {
-        font-size: 1.05rem;
-        opacity: 0.8;
-        margin-bottom: 16px;
-    }
-    .method-badge {
-        background-color: var(--secondary-background-color, rgba(49, 130, 206, 0.1));
-        border-left: 4px solid #3182ce;
-        padding: 10px 14px;
-        border-radius: 6px;
-        font-size: 0.88rem;
-        margin-bottom: 20px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
 # Header Banner
-st.markdown('<div class="main-header">🌲 Learned Indexes vs. B+ Trees</div>', unsafe_allow_html=True)
+st.title("🌲 Learned Indexes vs. B+ Trees")
 st.markdown(
-    '<div class="sub-header">'
-    'An interactive comparison: <i>When do learned indexes beat B+ Trees (lookup speed, memory), '
-    'and when do they lose (inserts, write-heavy workloads, hard distributions)?</i>'
-    '</div>',
-    unsafe_allow_html=True
+    "*An interactive comparison: When do learned indexes beat B+ Trees (lookup speed, memory), "
+    "and when do they lose (inserts, write-heavy workloads, hard distributions)?*"
 )
 
-st.markdown(
-    '<div class="method-badge">'
-    '<b>Methodological Note:</b> Python runtime overhead blurs absolute speed differences. '
-    'Observe <b>relative algorithmic trends</b>, memory compression, and retraining penalties, '
-    'rather than claiming production C++ speedups.'
-    '</div>',
-    unsafe_allow_html=True
+st.info(
+    "**Methodological Note:** Python runtime overhead blurs absolute speed differences. "
+    "Observe **relative algorithmic trends**, memory compression, and retraining penalties, "
+    "rather than claiming production C++ speedups.",
+    icon="💡"
 )
 
 # Sidebar Configuration

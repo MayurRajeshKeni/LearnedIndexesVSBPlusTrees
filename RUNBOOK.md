@@ -50,11 +50,12 @@ cd C:\path\to\DBMS_B+Trees
 # 2. Create the virtual environment
 python -m venv .venv
 
-# 3. If PowerShell blocks script activation, permit it for this session:
+# 3. Option A (Recommended): Activate the virtual environment
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-
-# 4. Activate the virtual environment
 .\.venv\Scripts\Activate.ps1
+
+# Option B: Run directly via .venv without changing execution policy
+.\.venv\Scripts\python.exe --version
 ```
 
 ### 🪟 Windows (Command Prompt - cmd.exe)
@@ -90,6 +91,7 @@ source .venv/bin/activate
 ```
 
 > **Verification:** Once activated, your terminal prompt will be prefixed with `(.venv)`.
+> Alternatively on Windows, you can invoke `.\.venv\Scripts\python.exe` directly without activating.
 
 ---
 
@@ -97,12 +99,19 @@ source .venv/bin/activate
 
 Install all required numerical, database, visualization, and testing libraries.
 
+### With activated virtual environment:
 ```bash
 # Upgrade pip to latest version
 python -m pip install --upgrade pip
 
 # Install project dependencies
 pip install -r requirements.txt
+```
+
+### Directly via `.venv` (Windows without activating):
+```powershell
+.\.venv\Scripts\python.exe -m pip install --upgrade pip
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
 ```
 
 ### What gets installed:
@@ -199,13 +208,27 @@ python run_all.py --skip-tests
 
 The Streamlit UI provides an interactive classroom presentation suite across four tabs.
 
-### 6.1 Standard Launch
+### 6.1 Launch Commands
+
+#### Windows (Activated venv or Universal):
 ```bash
 streamlit run app.py
-```
-*Or using the Python module syntax (recommended if `streamlit` is not on your shell PATH):*
-```bash
+# or
 python -m streamlit run app.py
+```
+
+#### Windows (Direct via `.venv` without activating):
+```powershell
+.\.venv\Scripts\streamlit.exe run app.py
+# or
+.\.venv\Scripts\python.exe -m streamlit run app.py
+```
+
+#### macOS / Linux:
+```bash
+source .venv/bin/activate && streamlit run app.py
+# or
+./.venv/bin/streamlit run app.py
 ```
 
 ### What happens when you run this:
@@ -216,14 +239,42 @@ python -m streamlit run app.py
 If port 8501 is already in use by another service:
 ```bash
 streamlit run app.py --server.port 8502
+# or direct via .venv
+.\.venv\Scripts\streamlit.exe run app.py --server.port 8502
 ```
 
-### 6.3 Running in Headless Mode (Remote Server / SSH / Docker)
-If running on a remote cloud VM without a desktop display:
+### 6.3 Running in Headless Mode (Remote Server / SSH / Background Daemon)
+If running on a remote cloud VM without a desktop display or in the background:
 ```bash
 streamlit run app.py --server.headless true --server.address 0.0.0.0 --server.port 8501
 ```
-*You can then access the UI in your browser via `http://<server-ip>:8501`.*
+*You can then access the UI in your browser via `http://<server-ip>:8501` or `http://localhost:8501`.*
+
+### 6.4 Web App Architecture & Features
+The web app is structured into four interactive tabs with persistent sidebar controls:
+
+- **🧠 Tab 1: How It Works (Step-by-Step Interactive Simulator)**
+  - Select any index (**B+ Tree**, **RMI**, **PGM**, **ALEX-lite**) and search for any custom key.
+  - Step-by-step visual trace showing model prediction, calculated search bounds $[pos - err, pos + err]$, and binary/exponential search steps.
+  - Live **VizBTree** interactive visualizer that renders node splits and Graphviz DOT graphs dynamically upon inserting new keys.
+- **🏎️ Tab 2: Live Race (Real-Time Head-to-Head Competition)**
+  - Runs a live head-to-head race comparing all 4 indexes simultaneously.
+  - Measures lookup latency (nanoseconds/query) and exact memory consumption on the fly.
+  - Displays instant ranking cards and winner summaries for the active distribution.
+- **📊 Tab 3: Benchmark Dashboard (Empirical Analysis & Tradeoffs)**
+  - Analyzes full empirical benchmark data across 4 synthetic distributions (Uniform, Lognormal, Clustered, Sequential+Noise).
+  - High-res charts: grouped lookup latency, log-scale memory overhead, insert throughput vs buffer retraining costs, and mixed read/write workloads (100/0, 90/10, 50/50).
+  - Hyperparameter sensitivity curves ($M$ models for RMI, $\epsilon$ tolerance for PGM).
+  - Research literature alignment cards comparing empirical findings to published claims (Kraska 2018, Ding 2020, Ferragina 2020, Marcus 2020).
+- **🔍 Tab 4: Data Explorer (CDF & Spacing Analysis)**
+  - Interactive CDF (Cumulative Distribution Function) visualizer showing key linearity and distribution predictability.
+  - Key spacing histograms revealing clusters, gaps, and noise.
+- **⚙️ Sidebar Controls & Interactive Guides:**
+  - **Dataset Distribution Selector:** Uniform, Lognormal, Clustered, Sequential with Noise.
+  - **Dataset Size ($N$) & Seed:** Configurable key volume and deterministic reproducibility.
+  - **Model Hyperparameters:** Stage-2 sub-models ($M$) for RMI, error bound ($\epsilon$) for PGM.
+  - **💡 What Changes What? (Knobs Guide):** Collapsible explainer detailing the exact impact of every control.
+  - **📚 Acronyms & Literature Glossary:** Comprehensive reference of paper citations and terminology.
 
 ---
 
@@ -271,17 +322,17 @@ python -c "import pandas as pd; df = pd.read_csv('results/results.csv'); print(d
 
 ## 8. Command Cheat Sheet (Quick Reference)
 
-| Task | Universal Command |
-| :--- | :--- |
-| **Install dependencies** | `pip install -r requirements.txt` |
-| **Run all tests** | `python -m pytest tests/` |
-| **Run tests verbosely** | `python -m pytest -v tests/` |
-| **Run smoke benchmark (N=20k)** | `python run_all.py --quick` |
-| **Run full benchmark (N=200k)** | `python run_all.py` |
-| **Run 1M keys benchmark** | `python run_all.py --n 1000000 --lookups 100000` |
-| **Launch Streamlit Web UI** | `streamlit run app.py` |
-| **Launch UI (module syntax)** | `python -m streamlit run app.py` |
-| **Clean cache directories** | `python -c "import shutil, os; [shutil.rmtree(d, ignore_errors=True) for d in ['.pytest_cache', '__pycache__']]"` |
+| Task | Activated / Universal Command | Direct `.venv` Command (Windows) |
+| :--- | :--- | :--- |
+| **Install dependencies** | `pip install -r requirements.txt` | `.\.venv\Scripts\python.exe -m pip install -r requirements.txt` |
+| **Run all 36 tests** | `python -m pytest tests/` | `.\.venv\Scripts\python.exe -m pytest tests/` |
+| **Run tests verbosely** | `python -m pytest -v tests/` | `.\.venv\Scripts\python.exe -m pytest -v tests/` |
+| **Run smoke benchmark (N=20k)** | `python run_all.py --quick` | `.\.venv\Scripts\python.exe run_all.py --quick` |
+| **Run full benchmark (N=200k)** | `python run_all.py` | `.\.venv\Scripts\python.exe run_all.py` |
+| **Run 1M keys benchmark** | `python run_all.py --n 1000000 --lookups 100000` | `.\.venv\Scripts\python.exe run_all.py --n 1000000 --lookups 100000` |
+| **Launch Streamlit Web UI** | `streamlit run app.py` | `.\.venv\Scripts\streamlit.exe run app.py` |
+| **Launch UI (module syntax)** | `python -m streamlit run app.py` | `.\.venv\Scripts\python.exe -m streamlit run app.py` |
+| **Clean cache directories** | `python -c "import shutil, os; [shutil.rmtree(d, ignore_errors=True) for d in ['.pytest_cache', '__pycache__']]"` | `.\.venv\Scripts\python.exe -c "import shutil, os; [shutil.rmtree(d, ignore_errors=True) for d in ['.pytest_cache', '__pycache__']]"` |
 
 ---
 
